@@ -12,7 +12,7 @@ organCtrl.create = async (req, res) => {
     }
 
     try {
-        const { oid } = req.params;
+        const { oid } = req.params;//categor
         const body = req.body;
 
         console.log("oid", oid)
@@ -243,6 +243,7 @@ organCtrl.mysearchget = async (req, res) => {
         const search = req.query.organ || "";
         const searchQuery = { organName: { $regex: search, $options: "i" } };
         const organSearch = await Organ.find(searchQuery);
+        
 
         if (organSearch.length > 0) {
             return res.status(200).json(organSearch);
@@ -258,7 +259,49 @@ organCtrl.mysearchget = async (req, res) => {
     }
 };
 
+organCtrl.confirmRequest=async(req,res)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+        const { oid, id } = req.params;
 
+        // Find and update the organ
+        const organ = await Organ.findOneAndUpdate(
+            { _id: id, oid },
+            { sold: true },
+            { new: true }
+        );
+
+        if (!organ) {
+            return res.status(404).json({ error: "Organ not found" });
+        }
+         // handle other request logic (e.g., create a request entry)
+
+         return res.status(200).json({ message: "Request confirmed and organ marked as sold." });
+        } catch (error) {
+            console.error("Error confirming request:", error);
+            return res.status(500).json("Internal server error");
+        }
+
+
+}
+
+// Assuming you are using Mongoose
+organCtrl.status= async (req, res) => {
+    try {
+      const organ = await Organ.findByIdAndUpdate(
+        req.params.id,
+        { status: req.body.status },
+        { new: true }
+      );
+      res.status(200).json(organ);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+  
 
 module.exports = organCtrl;
 

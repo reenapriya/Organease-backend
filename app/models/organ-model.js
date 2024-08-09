@@ -38,10 +38,7 @@ const organSchema = new Schema({
         type: String,
         required: true
     },
-    // oCertificate:{
-    //     type:String,
-    //     required:true
-    // },
+    
     cid: {
         type: Schema.Types.ObjectId,
         ref: "CentreProfile"
@@ -57,7 +54,11 @@ const organSchema = new Schema({
     secretCode:{
         type:String,
         required :true
-    }
+    },
+    requestBy:[{type :Schema.Types.ObjectId, ref:"Hospital"}],
+    isRequested: { type: Boolean, default: false },
+    
+
 
 })
 const Organ = model("Organ", organSchema)

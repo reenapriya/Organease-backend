@@ -1,5 +1,5 @@
 const mongoose=require("mongoose")
-const { hName, hEmail } = require("../validation/hospital-validation")
+
 const {Schema,model}=mongoose
 
 
@@ -41,6 +41,10 @@ const requestSchema= new Schema({
     ref:"CentreProfile"
    },
    secretCode:{
+    type:String,
+    ref:"Organ"
+   },
+   oprice:{
     type:String,
     ref:"Organ"
    }

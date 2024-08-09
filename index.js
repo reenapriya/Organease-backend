@@ -21,6 +21,7 @@ const  fs = require('fs')
 const path = require('path')
 const cloudinary=require("./utils/cloudinary")
 const upload=require("./app/middleware/multer")
+const paymentCntrl=require("./app/controller/payment-cntrl")
 
 app.use(cors())
 app.use(express.json())
@@ -68,7 +69,10 @@ app.get("/organShowOne/category/:oid/organ/:id", authenticateUser, authorizeUser
 app.get("/search", organCtrl.mysearchget)
 app.get("/organShow/category/:oid", authenticateUser, authorizeUser(["Centre", "Hospital"]), organCtrl.myshow)
 app.put("/organUpdate/category/:oid/organ/:id", authenticateUser, authorizeUser(["Centre"]), organCtrl.update);
-app.delete("/organRemove/category/:oid/organ/:id", authenticateUser, authorizeUser(["Centre"]), organCtrl.remove);
+app.delete("/organRemove/category/:oid/organ/:id", authenticateUser, authorizeUser(["Centre"]), organCtrl.remove) ;
+app.post('/confirmRequest/:id/:oid', organCtrl.confirmRequest);
+app.put('/organ/:id/status',organCtrl.status)
+
 
 //patient:
 app.post("/patientcreate", authenticateUser, authorizeUser(["Hospital"]), checkSchema(patientValidation), patientCtrl.create)
@@ -79,14 +83,17 @@ app.get("/patientShowAll",authenticateUser,authorizeUser(["Hospital"]),patientCt
 //request :
 app.post("/requestcreate",authenticateUser,authorizeUser(["Hospital","Centre"]),requestCtrl.create)
 app.get("/hospitalrequestShow/:hid",authenticateUser,authorizeUser(["Hospital"]),requestCtrl.show)
+
 app.get("/centrerequestShow/:cid",authenticateUser,authorizeUser(["Centre"]),requestCtrl.showForCentre)
 app.put("/centrerequestUpdate/:id",authenticateUser,authorizeUser(["Centre"]),requestCtrl.update)
-//app.get("/showAllRequest",authenticateUser,authorizeUser(["Centre"]),requestCtrl.showAll)
+app.get("/showOnerequest/:id",authenticateUser,authorizeUser(["Centre","Hospital"]),requestCtrl.showOne)
+app.get('/latestRequests',requestCtrl.latest)
 
 //payment
-// app.post('/payment/pay',paymentCntrl.pay)
-// app.put('/payment/success/:id',paymentCntrl.successUpdate)
-// app.put('/payment/failed/:id',paymentCntrl.failedUpdate)
+app.post('/payment/pay',paymentCntrl.pay)
+app.put('/payment/success/:stripeId',paymentCntrl.successUpdate)
+app.put('/payment/failed/:stripeId',paymentCntrl.failedUpdate)
+app.get('/payment/status/:cid',paymentCntrl.status)
 
 app.listen(port, () => {
     console.log("sucessfully connected port")

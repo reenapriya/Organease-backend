@@ -42,10 +42,18 @@ categoryCtrl.show=async(req,res)=>{
     }
     try{
        
+      const centreProfile = await CentreProfile.findOne({ userId: req.user._id });
+
+    if (!centreProfile) {
+      return res.status(404).json({ error: "Centre Profile not found" });
+    }
 
     // Now you have the Centre Profile object, extract _id as cid for the category
+    const cid = centreProfile._id;
+
+  
    
-    const category=await Category.find()
+    const category=await Category.find( {cid :cid})
     return res.status(201).json(category)
     }
     catch(e){

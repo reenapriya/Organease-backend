@@ -10,10 +10,7 @@ const hospitalSchema = new Schema({
         type: String,
         ref: "User"
     },
-    authCertificate: {
-        type: String,
-        required: true
-    },
+   
 
     place: {
         type: String,
