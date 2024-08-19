@@ -163,10 +163,10 @@ requestCtrl.latest= async (req, res) => {
       const latestRequests = await Request.find()
         .sort({ createdAt: -1 }) // Sort by creation date in descending order
         .limit(3); // Limit to 3 requests
-      res.json(latestRequests);
+       return res.json(latestRequests);
     } catch (error) {
         console.log(error.message)
-      res.status(500).json({ message: 'Server error' });
+       return res.status(500).json({ message: 'Server error' });
     }
   };
   
