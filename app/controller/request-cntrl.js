@@ -170,5 +170,56 @@ requestCtrl.latest= async (req, res) => {
     }
   };
   
-
+// Example route on the backend
+// requestCtrl.latestOne= async (req, res) => {
+//     const { cid } = req.params;
+//     try {
+//       const requests = await Request.find({ centreId: cid }).sort({ createdAt: -1 }).limit(3).populate('hospital');
+//        return res.json(requests);
+//     } catch (error) {
+//       res.status(500).json({ error: 'Error fetching latest requests' });
+//     }
+//   };
+  
+requestCtrl.latestOne = async (req, res) => {
+    const { cid } = req.params;
+    console.log(`Fetching latest requests for Centre ID: ${cid}`); // Debugging line
+  
+    try {
+      // Find requests with the given centreId
+      const requests = await Request.find({ centreId: cid })
+        .sort({ createdAt: -1 })
+        .limit(3)
+        .populate('hospital');
+      
+      // Debugging line to log the results
+      console.log('Requests found:', requests);
+  
+      if (requests.length === 0) {
+        console.log('No requests found for the given centreId.');
+      }
+  
+      res.json(requests);
+    } catch (error) {
+      console.error('Error fetching latest requests:', error); // More detailed error logging
+      res.status(500).json({ error: 'Error fetching latest requests' });
+    }
+  };
+  
 module.exports=requestCtrl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

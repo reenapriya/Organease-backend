@@ -12,10 +12,6 @@ centreCtrl.register = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-
-  
-   
- 
   try {
     const { contact, address, license } = req.body;
     
@@ -54,7 +50,7 @@ centreCtrl.register = async (req, res) => {
     await newCentre.save();
     return res.status(201).json(newCentre);
   } catch (e) {
-    console.log(e);
+    console.log(e.message);
     return res.status(500).json("Internal server error");
   }
 };

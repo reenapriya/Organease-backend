@@ -88,6 +88,7 @@ app.get("/centrerequestShow/:cid",authenticateUser,authorizeUser(["Centre"]),req
 app.put("/centrerequestUpdate/:id",authenticateUser,authorizeUser(["Centre"]),requestCtrl.update)
 app.get("/showOnerequest/:id",authenticateUser,authorizeUser(["Centre","Hospital"]),requestCtrl.showOne)
 app.get('/latestRequests',requestCtrl.latest)
+app.get('/latestRe/:cid',requestCtrl.latestOne)
 
 //payment
 app.post('/payment/pay',paymentCntrl.pay)
